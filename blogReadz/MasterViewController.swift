@@ -18,7 +18,36 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        let url = NSURL(string:"https://www.googleapis.com/blogger/v3/blogs/10861780/posts?key=AIzaSyAf-VU1PWtruJbZxVKjxkwZSwWBe4YjGBk")!
+        let url = NSURL(string:"https://www.googleapis.com/blogger/v3/blogs/10861780/posts?key=AIzaSyAf-VU1PWtruJbZxVKjxkwZSwWBe4YjGBk")!;
+        
+        let session = NSURLSession.sharedSession();
+        
+        let task = session.dataTaskWithURL(url) { (data, response, error) -> Void in
+        
+            if error != nil {
+            
+                print(error)
+            
+            } else {
+            
+                if let data = data {
+                
+                    // print to see that we get a response
+                    // print(NSString(data: data, encoding: NSUTF8StringEncoding))
+                    
+                    do {let jsonResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                        
+                        print(jsonResult)
+                        
+                    } catch {}
+                
+                }
+                
+            }
+        
+        }
+        
+        task.resume()
         
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationItem.leftBarButtonItem = self.editButtonItem()
